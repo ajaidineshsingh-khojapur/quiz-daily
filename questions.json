@@ -1,12 +1,28 @@
 [
     { 
-        "q": "What is the capital of France?", 
-        "a": ["London", "Berlin", "Paris", "Madrid"], 
-        "correct": 2 
+        "q": "what is the name of disttric of village Khojapur?", 
+        "a": ["Akbarpur", "Sultanpr", "Pratapgarh", "Allahabad"], 
+        "correct": 1 
     },
     { 
-        "q": "Which is the largest planet?", 
-        "a": ["Mars", "Saturn", "Jupiter", "Earth"], 
-        "correct": 2 
+        "q": "Is Ajay Pratap Singh live in village khoajapur?", 
+        "a": ["Yes", "No"], 
+        "correct": 0 
+    },
+     { 
+        "q": "Is Ajay Pratap Singh is good man?", 
+        "a": ["Yes", "No"], 
+        "correct": 0 
+    },
+     { 
+        "q": "Are you know him?", 
+        "a": ["Yes", "No"], 
+        "correct": 0 
+    },
+     { 
+        "q": "What does Ajay do?", 
+        "a": ["Engineering", "Teaching","Guiding"], 
+        "correct": 0 
     }
 ]
+
