@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My First Drawing App</title>
+    <style>
+        body { text-align: center; font-family: sans-serif; background: #f0f0f0; }
+        canvas { 
+            background: white; 
+            border: 2px solid #333; 
+            border-radius: 10px; 
+            cursor: crosshair; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .controls { margin: 20px; }
+        button { padding: 10px 20px; cursor: pointer; background: #4A90E2; color: white; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h1>Drawing Pad</h1>
+    <div class="controls">
+        <button onclick="clearCanvas()">Clear Canvas</button>
+        <input type="color" id="colorPicker" value="#000000">
+        <input type="range" id="sizePicker" min="1" max="20" value="5">
+    </div>
+
+    <canvas id="paintCanvas" width="600" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('paintCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorPicker = document.getElementById('colorPicker');
+        const sizePicker = document.getElementById('sizePicker');
+
+        let painting = false;
+
+        // Start drawing
+        function startPosition(e) {
+            painting = true;
+            draw(e);
+        }
+
+        // Stop drawing
+        function finishedPosition() {
+            painting = false;
+            ctx.beginPath(); // Resets the path so lines don't connect across the screen
+        }
+
+        // The drawing logic
+        function draw(e) {
+            if (!painting) return;
+
+            ctx.lineWidth = sizePicker.value;
+            ctx.lineCap = 'round'; // Makes the line smooth
+            ctx.strokeStyle = colorPicker.value;
+
+            // Get mouse position relative to canvas
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Event Listeners
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', finishedPosition);
+        canvas.addEventListener('mousemove', draw);
+    </script>
+</body>
+</html>
