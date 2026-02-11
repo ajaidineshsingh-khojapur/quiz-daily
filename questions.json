@@ -1,0 +1,12 @@
+[
+    { 
+        "q": "What is the capital of France?", 
+        "a": ["London", "Berlin", "Paris", "Madrid"], 
+        "correct": 2 
+    },
+    { 
+        "q": "Which is the largest planet?", 
+        "a": ["Mars", "Saturn", "Jupiter", "Earth"], 
+        "correct": 2 
+    }
+]

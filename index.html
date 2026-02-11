@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Quiz App</title>
+    <style>
+        /* All your beautiful CSS goes here */
+        :root { --primary: #4A90E2; --bg: #F5F7FA; --text: #2C3E50; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        .progress-container { background: #E0E0E0; height: 10px; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
+        #progress-bar { background: var(--primary); height: 100%; width: 0%; transition: width 0.3s ease; }
+        .options { display: grid; gap: 12px; }
+        button.option-btn { padding: 12px; border: 2px solid #EEE; border-radius: 8px; background: white; cursor: pointer; text-align: left; }
+        button.option-btn:hover { border-color: var(--primary); background: #F0F7FF; }
+        #result-area { text-align: center; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div id="quiz-area">
+        <div class="progress-container"><div id="progress-bar"></div></div>
+        <div id="question-text" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem;">Loading today's questions...</div>
+        <div id="options-container" class="options"></div>
+    </div>
+
+    <div id="result-area">
+        <h2>Quiz Complete!</h2>
+        <div id="final-score" style="font-size: 3rem; color: var(--primary); font-weight: bold;">0%</div>
+        <button onclick="location.reload()" style="margin-top: 20px; width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer;">Try Again</button>
+    </div>
+</div>
+
+<script>
+    let quizData = [];
+    let currentIdx = 0;
+    let score = 0;
+
+    // THIS IS THE MAGIC PART: It loads the external file
+    async function startApp() {
+        try {
+            const response = await fetch('questions.json');
+            quizData = await response.json();
+            loadQuestion();
+        } catch (error) {
+            document.getElementById("question-text").innerText = "Error loading questions. Make sure questions.json is in the same folder!";
+        }
+    }
+
+    function loadQuestion() {
+        const q = quizData[currentIdx];
+        document.getElementById("question-text").innerText = q.q;
+        const container = document.getElementById("options-container");
+        container.innerHTML = "";
+        
+        q.a.forEach((opt, i) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = opt;
+            btn.onclick = () => handleAnswer(i);
+            container.appendChild(btn);
+        });
+
+        const progress = (currentIdx / quizData.length) * 100;
+        document.getElementById("progress-bar").style.width = `${progress}%`;
+    }
+
+    function handleAnswer(selected) {
+        if(selected === quizData[currentIdx].correct) score++;
+        currentIdx++;
+        if(currentIdx < quizData.length) { loadQuestion(); } 
+        else { showResults(); }
+    }
+
+    function showResults() {
+        document.getElementById("quiz-area").style.display = "none";
+        document.getElementById("result-area").style.display = "block";
+        const percent = Math.round((score / quizData.length) * 100);
+        document.getElementById("final-score").innerText = `${percent}%`;
+    }
+
+    startApp();
+</script>
+</body>
+</html>
